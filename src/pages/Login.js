@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import useGetFormsContext from '../hooks/useGetFormContext';
 
 function Login() {
@@ -9,8 +10,16 @@ function Login() {
     handlePassword,
     handleEmail } = useGetFormsContext();
 
+  const history = useHistory();
+
+  const handleSubmit = (emailValue) => {
+    const saveLocalStorage = { email: emailValue };
+    localStorage.setItem('user', JSON.stringify(saveLocalStorage));
+    history.push('/meals');
+  };
+
   return (
-    <form>
+    <form onSubmit={ () => handleSubmit(email) }>
       <input
         type="email"
         id="email-input"
