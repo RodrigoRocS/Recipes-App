@@ -1,14 +1,25 @@
 import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import SearchContext from '../contexts/SearchContext';
 
 function SearchBar() {
+  const location = useLocation();
+  const path = location.pathname;
+
   const {
     searchName,
     setSearchName,
     searchType,
     setSearchType,
+    setFetchRequest,
 
   } = useContext(SearchContext);
+
+  const handleClick = () => {
+    if (searchType === 'firstLetter' && searchName.length > 1) {
+      global.alert('Your search must have only 1 (one) character');
+    } else { setFetchRequest({ type: searchType, name: searchName, path }); }
+  };
 
   return (
     <div>
@@ -52,7 +63,13 @@ function SearchBar() {
         />
         First Letter
       </label>
-      <button data-testid="exec-search-btn">SEARCH</button>
+      <button
+        data-testid="exec-search-btn"
+        onClick={ handleClick }
+      >
+        SEARCH
+
+      </button>
     </div>
   );
 }
