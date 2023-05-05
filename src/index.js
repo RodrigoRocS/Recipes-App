@@ -5,14 +5,17 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import SearchProvider from './contexts/SearchProvider';
+import GetFormsProvider from './context/GetFormsProvider';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
     <SearchProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <GetFormsProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </GetFormsProvider>,
     </SearchProvider>,
   );
 
