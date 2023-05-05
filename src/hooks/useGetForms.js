@@ -9,7 +9,7 @@ function GetForms() {
   const handleEmail = (value) => setEmail(value);
 
   const validateForm = useCallback(() => {
-    const minCharPassword = 6;
+    const minCharPassword = 7;
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (re.test(email) && password.length >= minCharPassword) {
       setIsValid(false);
