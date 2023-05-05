@@ -20,10 +20,10 @@ function Header({ title, search }) {
         ?
         <button
           type="submit"
-          data-testid="search-top-btn"
           onClick={ handleClick }
         >
           <img
+            data-testid="search-top-btn"
             src={ searchIcon }
             alt=""
           />
