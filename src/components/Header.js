@@ -1,26 +1,23 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import SearchBar from './SearchBar';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
 function Header({ title, search }) {
   const [searchBar, setSearchBar] = useState(false);
-  const handleClick = () => {
-    setSearchBar(!searchBar ? searchBar : !searchBar);
-  };
+  console.log(searchBar);
 
   if (search) {
     return (
       <div>
-        <Link to="/">
+        <Link to="/profile">
           <img src={ profileIcon } alt="" data-testid="profile-top-btn" />
         </Link>
-        { searchBar }
-        ?
         <button
           type="submit"
-          onClick={ handleClick }
+          onClick={ () => setSearchBar(!searchBar) }
         >
           <img
             data-testid="search-top-btn"
@@ -28,18 +25,7 @@ function Header({ title, search }) {
             alt=""
           />
         </button>
-        :
-        <button
-          type="submit"
-          data-testid="search-top-btn"
-          onClick={ handleClick }
-        >
-          <img
-            src={ searchIcon }
-            alt=""
-          />
-        </button>
-        <h1> Colocar componente da barra de pesquisa </h1>
+        { searchBar === true ? <SearchBar /> : null }
         <h1 data-testid="page-title">{ title }</h1>
       </div>
     );

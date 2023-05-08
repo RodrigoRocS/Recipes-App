@@ -7,7 +7,7 @@ function Profile() {
   const { email, handleButtons } = useProfile();
   return (
     <div>
-      <Header title="Profile" search="false" />
+      <Header title="Profile" search={ false } />
       <h3 data-testid="profile-email">{email}</h3>
       <button
         data-testid="profile-done-btn"
