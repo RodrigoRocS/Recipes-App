@@ -6,16 +6,19 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import SearchProvider from './contexts/SearchProvider';
 import GetFormsProvider from './context/GetFormsProvider';
+import RecipeInProgressProvider from './contexts/RecipeInProgressProvider';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
     <SearchProvider>
       <GetFormsProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </GetFormsProvider>,
+        <RecipeInProgressProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipeInProgressProvider>
+      </GetFormsProvider>
     </SearchProvider>,
   );
 
