@@ -21,7 +21,7 @@ function Profile() {
         value="/favorite-recipes"
         onClick={ ({ target: { value } }) => handleButtons(value) }
       >
-        Favorites Recipes
+        Favorite Recipes
       </button>
       <button
         data-testid="profile-logout-btn"

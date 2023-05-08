@@ -5,7 +5,7 @@ function useProfile() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    const localStorageValue = JSON.parse(localStorage.getItem('user'));
+    const localStorageValue = JSON.parse(localStorage.getItem('user')) ?? {};
     setEmail(localStorageValue.email);
   }, []);
 
