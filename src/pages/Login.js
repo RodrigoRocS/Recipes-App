@@ -8,7 +8,7 @@ function Login() {
     password,
     isValid,
     handlePassword,
-    handleEmail } = useGetFormsContext();
+    handleEmail } = useGetFormsContext() || {};
 
   const history = useHistory();
 
@@ -20,22 +20,28 @@ function Login() {
 
   return (
     <form onSubmit={ () => handleSubmit(email) }>
-      <input
-        type="email"
-        id="email-input"
-        value={ email }
-        data-testid="email-input"
-        placeholder="Insira seu email"
-        onChange={ ({ target: { value } }) => handleEmail(value) }
-      />
-      <input
-        type="password"
-        id="password-input"
-        value={ password }
-        data-testid="password-input"
-        placeholder="Insira seu password"
-        onChange={ ({ target: { value } }) => handlePassword(value) }
-      />
+      <label htmlFor="email-input">
+        Email:
+        <input
+          type="email"
+          id="email-input"
+          value={ email }
+          data-testid="email-input"
+          placeholder="Email"
+          onChange={ ({ target: { value } }) => handleEmail(value) }
+        />
+      </label>
+      <label htmlFor="password-input">
+        Senha:
+        <input
+          type="password"
+          id="password-input"
+          value={ password }
+          data-testid="password-input"
+          placeholder="Senha"
+          onChange={ ({ target: { value } }) => handlePassword(value) }
+        />
+      </label>
       <button
         id="submit-btn"
         value="email"
