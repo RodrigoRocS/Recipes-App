@@ -6,6 +6,7 @@ import useProfile from '../hooks/useProfile';
 function Profile() {
   const { email, handleButtons } = useProfile();
   return (
+      <div>
       <Header title="Profile" search={ false } />
       <h3 data-testid="profile-email">{email}</h3>
       <button
