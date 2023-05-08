@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { GetFormsContext } from '../context/GetFormsProvider';
+import { GetFormsContext } from './GetFormsProvider';
 
 const useGetFormsContext = () => useContext(GetFormsContext);
 

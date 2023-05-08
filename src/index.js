@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import SearchProvider from './contexts/SearchProvider';
-import GetFormsProvider from './context/GetFormsProvider';
+import GetFormsProvider from './contexts/GetFormsProvider';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
@@ -15,7 +15,7 @@ ReactDOM
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </GetFormsProvider>,
+      </GetFormsProvider>
     </SearchProvider>,
   );
 
