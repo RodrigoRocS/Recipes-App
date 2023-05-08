@@ -3,7 +3,7 @@ import Header from '../components/Header';
 
 function FavoriteRecipes() {
   return (
-    <Header title="Done Recipes" search="false" />
+    <Header title="Favorite Recipes" search={ false } />
   );
 }
 
