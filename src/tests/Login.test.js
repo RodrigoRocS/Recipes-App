@@ -2,8 +2,8 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import renderWithRouter from './renderWithRouter';
-import GetFormsProvider from '../context/GetFormsProvider';
+import renderWithRouter from './helpers/renderWithRouter';
+import GetFormsProvider from '../contexts/GetFormsProvider';
 
 describe('Teste da pagina Login', () => {
   test('O input de Email é renderizado nela', () => {
