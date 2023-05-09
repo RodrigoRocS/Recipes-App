@@ -17,11 +17,14 @@ const RECIPE_ID = '53071';
 /* const DRINKS_API = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 const DRINK_ID = '11002'; */
 
+const timeCopy = 5000;
+
 function RecipeInProgressProvider({ children }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [checkboxesState, setCheckboxesState] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);
+  const [copied, setCopied] = useState(false);
   const recipeObj = recipe[0];
   const {
     idMeal,
@@ -41,7 +44,7 @@ function RecipeInProgressProvider({ children }) {
     initialFetch();
   }, []);
 
-  // ESTE TRECHO SETA OS ESTADOS INICIAIS PARA TRABALHAR A LÓGICA DE INGREDIENTES CHECKADOS.
+  // ESTE BLOCO SETA OS ESTADOS INICIAIS PRA LÓGICA DE INGREDIENTES CHECKADOS.
 
   const saveCheckboxStates = useCallback(() => {
     const localRecipes = getRecipesInProgress();
@@ -130,6 +133,21 @@ function RecipeInProgressProvider({ children }) {
     setIsFavorite(verify);
   }, [idMeal]);
 
+  // ======= ESTE BLOCO LIDA COM A LÓGICA DE COMPARTILHAR RECEITAS ==========
+
+  const handleShareRecipes = useCallback(async () => {
+    await navigator.clipboard.writeText('Este é um texto legal');
+    setCopied(true);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, timeCopy);
+
+    return () => clearTimeout(timer);
+  }, [copied]);
+
   // ========================================================================
 
   const values = useMemo(() => ({
@@ -139,6 +157,8 @@ function RecipeInProgressProvider({ children }) {
     checkboxesState,
     handleFavoriteRecipes,
     isFavorite,
+    handleShareRecipes,
+    copied,
   }), [
     recipe,
     ingredients,
@@ -146,6 +166,8 @@ function RecipeInProgressProvider({ children }) {
     checkboxesState,
     handleFavoriteRecipes,
     isFavorite,
+    handleShareRecipes,
+    copied,
   ]);
 
   return (
