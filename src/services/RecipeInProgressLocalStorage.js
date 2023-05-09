@@ -1,16 +1,14 @@
-const getRecipesInProgress = () => {
+export const getRecipesInProgress = () => {
   const localRecipes = localStorage.getItem('inProgressRecipes');
   if (!localRecipes) return {};
   return JSON.parse(localRecipes);
 };
 
-const setRecipesInProgress = (recipeName, recipeStates) => {
+export const setRecipesInProgress = (recipeId, recipeStates) => {
   const localRecipes = getRecipesInProgress();
   const newRecipes = {
     ...localRecipes,
-    [recipeName]: recipeStates,
+    [recipeId]: recipeStates,
   };
   localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipes));
 };
-
-export default setRecipesInProgress;

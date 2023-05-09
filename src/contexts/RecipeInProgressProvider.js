@@ -1,22 +1,42 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import RecipeInProgressContext from './RecipeInProgressContext';
-import setRecipesInProgress from '../services/RecipeInProgressLocalStorage';
+import {
+  getRecipesInProgress,
+  setRecipesInProgress,
+} from '../services/RecipeInProgressLocalStorage';
+import {
+  getFavoriteRecipes,
+  removeFavoriteRecipes,
+  setFavoriteRecipes,
+} from '../services/FavoriteRecipesLocalStorage';
 
+const RECIPES_API = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 const RECIPE_ID = '53071';
+
+/* const DRINKS_API = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
+const DRINK_ID = '11002'; */
 
 function RecipeInProgressProvider({ children }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  const [checkboxesState, setCheckboxesState] = useState({}); // Receberá update para que o initial state venha do localStore.
+  const [checkboxesState, setCheckboxesState] = useState({});
+  const [isFavorite, setIsFavorite] = useState(false);
   const recipeObj = recipe[0];
+  const {
+    idMeal,
+    strArea,
+    strCategory,
+    strMeal,
+    strMealThumb,
+  } = recipeObj !== undefined && recipeObj;
 
   useEffect(() => {
     const initialFetch = async () => {
-      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${RECIPE_ID}`);
+      const response = await fetch(`${RECIPES_API}${RECIPE_ID}`);
       const data = await response.json();
-      const { meals } = data;
-      setRecipe(meals);
+      const { meals, drinks } = data;
+      setRecipe(meals || drinks);
     };
     initialFetch();
   }, []);
@@ -24,6 +44,8 @@ function RecipeInProgressProvider({ children }) {
   // ESTE TRECHO SETA OS ESTADOS INICIAIS PARA TRABALHAR A LÓGICA DE INGREDIENTES CHECKADOS.
 
   const saveCheckboxStates = useCallback(() => {
+    const localRecipes = getRecipesInProgress();
+
     const ingredientes = recipe.length !== 0 && Object.keys(recipeObj)
       .filter((el) => el.includes('strIngredient'))
       .reduce((obj, el) => {
@@ -48,13 +70,18 @@ function RecipeInProgressProvider({ children }) {
 
     setIngredients(formatIngredients);
 
+    if (localRecipes[idMeal]) {
+      setCheckboxesState(localRecipes[idMeal]);
+      return;
+    }
+
     const objCheckboxState = formatIngredients.reduce((acc, ingredient) => {
       acc[ingredient] = false;
       return acc;
     }, {});
 
     setCheckboxesState(objCheckboxState);
-  }, [recipe.length, recipeObj]);
+  }, [idMeal, recipe.length, recipeObj]);
 
   useEffect(() => {
     saveCheckboxStates();
@@ -63,13 +90,45 @@ function RecipeInProgressProvider({ children }) {
   // ========================================================================
 
   const handleChecks = useCallback(({ target }) => {
-    const { strMeal } = recipeObj;
     setCheckboxesState({
       ...checkboxesState,
       [target.name]: target.checked,
     });
-    setRecipesInProgress(strMeal, checkboxesState);
-  }, [checkboxesState, recipeObj]);
+  }, [checkboxesState]);
+
+  useEffect(() => {
+    if (!idMeal) return;
+    setRecipesInProgress(idMeal, checkboxesState);
+  }, [checkboxesState, idMeal]);
+
+  // ========= ESTE BLOCO LIDA COM A LÓGICA DE FAVORITAR RECEITAS ===========
+
+  const handleFavoriteRecipes = useCallback(() => {
+    const localRecipes = getFavoriteRecipes();
+    const verify = localRecipes.some((receita) => receita.id === idMeal);
+    if (verify) {
+      removeFavoriteRecipes(idMeal);
+      setIsFavorite(false);
+      return;
+    }
+    const newRecipeObj = {
+      id: idMeal,
+      type: 'meal',
+      nationality: strArea,
+      category: strCategory,
+      alcoholicOrNot: false,
+      name: strMeal,
+      image: strMealThumb,
+    };
+    setFavoriteRecipes(newRecipeObj);
+    setIsFavorite(true);
+  }, [idMeal, strArea, strCategory, strMeal, strMealThumb]);
+
+  useEffect(() => {
+    const localRecipes = getFavoriteRecipes();
+    const verify = localRecipes.some((receita) => receita.id === idMeal);
+    setIsFavorite(verify);
+  }, [idMeal]);
 
   // ========================================================================
 
@@ -78,11 +137,15 @@ function RecipeInProgressProvider({ children }) {
     ingredients,
     handleChecks,
     checkboxesState,
+    handleFavoriteRecipes,
+    isFavorite,
   }), [
     recipe,
     ingredients,
     handleChecks,
     checkboxesState,
+    handleFavoriteRecipes,
+    isFavorite,
   ]);
 
   return (
