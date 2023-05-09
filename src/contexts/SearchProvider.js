@@ -4,8 +4,8 @@ import SearchContext from './SearchContext';
 import useFetch from '../hooks/useFetch';
 
 export default function SearchProvider({ children }) {
-  const [searchName, setSearchName] = useState();
-  const [searchType, setSearchType] = useState();
+  const [searchName, setSearchName] = useState('');
+  const [searchType, setSearchType] = useState('');
   const [fetchRequest, setFetchRequest] = useState({});
 
   const [fetchRecipe, recipeData, isFetchRecipeLoading] = useFetch([]);
@@ -15,7 +15,7 @@ export default function SearchProvider({ children }) {
     switch (type) {
     case 'ingredient':
       if (path === '/drinks') {
-        fetchRecipe(`https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`);
+        fetchRecipe(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${name}`);
       } else {
         fetchRecipe(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${name}`);
       }
