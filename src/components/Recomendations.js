@@ -1,56 +1,27 @@
-import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import AppContext from '../contexts/AppContext';
-import fecthApi from '../servers/fetchApi';
-import '../styles/RecipeDetails.css';
+import { useRouteMatch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import useFetch from '../hooks/useFetch';
 
-export default function Recomendations({ type }) {
-  const { recomendations, setRecomendations } = useContext(AppContext);
-  const [isLoading, setLoading] = useState(true);
-  const six = 6;
-  const check2 = type === 'meal' ? 'Meal' : 'Drink';
+function Recomendations() {
+  const match = useRouteMatch(['/meals', '/drinks']);
+  const path = match?.path;
+  const [fetchRecipeRec, recipeDataRec] = useFetch([]);
 
   useEffect(() => {
-    async function getList() {
-      const recomendationsApi = await fecthApi(`https://www.the${type}db.com/api/json/v1/1/search.php?s=`);
-      // Guarda os dados das recomendações no estado.
-      const recomend = type === 'cocktail' ? recomendationsApi.drinks
-        : recomendationsApi.meals;
-      const recomndSlice = recomend.slice(0, six);
-      setRecomendations(recomndSlice);
-      setLoading(false);
+    const MEALSRECOMENDATION_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+    const DRINKSRECOMENDATION_URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+    if (path === '/meals') {
+      fetchRecipeRec(DRINKSRECOMENDATION_URL);
+    } else {
+      fetchRecipeRec(MEALSRECOMENDATION_URL);
     }
-    getList();
-  }, [type, setRecomendations, setLoading]);
+  }, [path, fetchRecipeRec]);
 
-  if (!isLoading) {
-    return (
-      <div className="carousel-container">
-        {
-          recomendations.map((item, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <img
-                src={ item[`str${check2}Thumb`] }
-                alt={ item[`str${check2}`] }
-                className="carousel-image"
-              />
-              <div
-                data-testid={ `${index}-recommendation-title` }
-                className="carousel-text"
-              >
-                {item[`str${check2}`]}
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    );
-  }
+  console.log(recipeDataRec);
+
+  return (
+    <div />
+  );
 }
 
-Recomendations.propTypes = {
-  type: PropTypes.string.isRequired,
-};
+export default Recomendations;
