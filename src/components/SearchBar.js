@@ -37,6 +37,7 @@ function SearchBar() {
     if (recipes?.drinks === null || recipes?.meals === null
       || recipes?.ingredients === null) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      console.log('fui chamado');
     }
   }, [recipes, history, path]);
 

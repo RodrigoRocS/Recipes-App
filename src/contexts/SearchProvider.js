@@ -43,7 +43,6 @@ export default function SearchProvider({ children }) {
 
   const handleArray = useCallback((arr) => {
     const { path } = fetchRequest;
-    console.log(path);
     const MN = 12;
     const recipeType = path === '/meals' ? 'meals' : 'drinks';
     if (!Array.isArray(arr[recipeType]) || arr[recipeType].length <= 1) {

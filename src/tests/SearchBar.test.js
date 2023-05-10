@@ -4,17 +4,22 @@ import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 import SearchProvider from '../contexts/SearchProvider';
 
+const SEARCH_BUTTON = 'search-top-btn';
+const SEARCH_INPUT = 'search-input';
+const FETCH_BUTTON = 'exec-search-btn';
+
 describe('Testes de comportamento do componente SearchBar', () => {
-  test('Testa se a barra de pesquisas é renderizada corretamente', () => {
+  test('Testa se a barra de pesquisas é renderizada corretamente e se ela funciona', () => {
     renderWithRouter(
       <SearchProvider>
         <App />
       </SearchProvider>,
       '/meals',
     );
-    const searchButton = screen.getByTestId('search-top-btn');
+
+    const searchButton = screen.getByTestId(SEARCH_BUTTON);
     userEvent.click(searchButton);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
     const ingredientRadius = screen.getByRole('radio', {
       name: /ingredient/i,
     });
@@ -28,26 +33,7 @@ describe('Testes de comportamento do componente SearchBar', () => {
     expect(ingredientRadius).toBeInTheDocument();
     expect(nameRadius).toBeInTheDocument();
     expect(firstLetterRadius).toBeInTheDocument();
-  });
-  test('Testa se a barra de pesquisas funciona corretamente', () => {
-    renderWithRouter(
-      <SearchProvider>
-        <App />
-      </SearchProvider>,
-      '/meals',
-    );
-    const searchButton = screen.getByTestId('search-top-btn');
-    userEvent.click(searchButton);
-    const searchInput = screen.getByTestId('search-input');
-    const ingredientRadius = screen.getByRole('radio', {
-      name: /ingredient/i,
-    });
-    const nameRadius = screen.getByRole('radio', {
-      name: /name/i,
-    });
-    const firstLetterRadius = screen.getByRole('radio', {
-      name: /first letter/i,
-    });
+
     userEvent.type(searchInput, 'lemon');
     expect(searchInput.value).toBe('lemon');
     userEvent.click(ingredientRadius);
@@ -58,24 +44,25 @@ describe('Testes de comportamento do componente SearchBar', () => {
     expect(firstLetterRadius.checked).toBe(true);
   });
   test('Testa se dispara uma mensagem de erro quando digita mais de uma letra e faz a requisição em `First letter`', () => {
-    jest.spyOn(global, 'alert').mockImplementation(() => {});
+    const globalAlert = jest.spyOn(global, 'alert').mockImplementation(() => {});
     renderWithRouter(
       <SearchProvider>
         <App />
       </SearchProvider>,
       '/meals',
     );
-    const topButton = screen.getByTestId('search-top-btn');
+    const topButton = screen.getByTestId(SEARCH_BUTTON);
     userEvent.click(topButton);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
     const firstLetterRadius = screen.getByRole('radio', {
       name: /first letter/i,
     });
-    const searchButton = screen.getByTestId('exec-search-btn');
+    const searchButton = screen.getByTestId(FETCH_BUTTON);
     userEvent.type(searchInput, 'lem');
     userEvent.click(firstLetterRadius);
     userEvent.click(searchButton);
     expect(global.alert).toHaveBeenCalledWith('Your search must have only 1 (one) character');
+    globalAlert.mockRestore();
   });
   test('Se é enviado para outra rota quando só um elemento retorna da api', async () => {
     const { history } = renderWithRouter(
@@ -85,13 +72,13 @@ describe('Testes de comportamento do componente SearchBar', () => {
       '/meals',
     );
 
-    const topButton = screen.getByTestId('search-top-btn');
+    const topButton = screen.getByTestId(SEARCH_BUTTON);
     userEvent.click(topButton);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
     const nameRadius = screen.getByRole('radio', {
       name: /name/i,
     });
-    const execSearchBtn = screen.getByTestId('exec-search-btn');
+    const execSearchBtn = screen.getByTestId(FETCH_BUTTON);
 
     userEvent.type(searchInput, 'lemon');
     userEvent.click(nameRadius);
@@ -109,13 +96,13 @@ describe('Testes de comportamento do componente SearchBar', () => {
       '/drinks',
     );
 
-    const topButton = screen.getByTestId('search-top-btn');
+    const topButton = screen.getByTestId(SEARCH_BUTTON);
     userEvent.click(topButton);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
     const nameRadius = screen.getByRole('radio', {
       name: /name/i,
     });
-    const execSearchBtn = screen.getByTestId('exec-search-btn');
+    const execSearchBtn = screen.getByTestId(FETCH_BUTTON);
 
     userEvent.type(searchInput, 'gin tonic');
     userEvent.click(nameRadius);
@@ -133,13 +120,13 @@ describe('Testes de comportamento do componente SearchBar', () => {
       '/drinks',
     );
 
-    const topButton = screen.getByTestId('search-top-btn');
+    const topButton = screen.getByTestId(SEARCH_BUTTON);
     userEvent.click(topButton);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
     const ingredientRadius = screen.getByRole('radio', {
       name: /ingredient/i,
     });
-    const execSearchBtn = screen.getByTestId('exec-search-btn');
+    const execSearchBtn = screen.getByTestId(FETCH_BUTTON);
 
     userEvent.type(searchInput, 'gin');
     userEvent.click(ingredientRadius);
@@ -152,29 +139,8 @@ describe('Testes de comportamento do componente SearchBar', () => {
       expect(apiImage).toBeInTheDocument();
     });
   });
-  // test('Se apareece error quando a busca resulta em null', async () => {
-  //   renderWithRouter(
-  //     '/drinks',
-  //   );
-
-  //   const topButton = screen.getByTestId('search-top-btn');
-  //   userEvent.click(topButton);
-  //   const searchInput = screen.getByTestId('search-input');
-  //   const ingredientRadius = screen.getByRole('radio', {
-  //     name: /ingredient/i,
-  //   });
-  //   const execSearchBtn = screen.getByTestId('exec-search-btn');
-
-  //   userEvent.type(searchInput, 'agua');
-  //   userEvent.click(ingredientRadius);
-  //   userEvent.click(execSearchBtn);
-
-  //   await waitFor(() => {
-  //     const alertMessage = 'Sorry, we haven\'t found any recipes for these filters.';
-  //     expect(global.alert).toHaveBeenCalledWith(alertMessage);
-  //   });
-  // });
-  test('Se é renderizado o elemento na tela', async () => {
+  test('Se apareece error quando a busca resulta em null', async () => {
+    jest.spyOn(global, 'alert').mockImplementation(() => {});
     renderWithRouter(
       <SearchProvider>
         <App />
@@ -182,23 +148,22 @@ describe('Testes de comportamento do componente SearchBar', () => {
       '/meals',
     );
 
-    const topButton = screen.getByTestId('search-top-btn');
+    const topButton = screen.getByTestId(SEARCH_BUTTON);
     userEvent.click(topButton);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(SEARCH_INPUT);
     const ingredientRadius = screen.getByRole('radio', {
       name: /ingredient/i,
     });
-    const execSearchBtn = screen.getByTestId('exec-search-btn');
+    const execSearchBtn = screen.getByTestId(FETCH_BUTTON);
 
-    userEvent.type(searchInput, 'gin');
+    userEvent.type(searchInput, 'agua');
     userEvent.click(ingredientRadius);
     userEvent.click(execSearchBtn);
 
     await waitFor(() => {
-      const apiImage = screen.getByRole('img', {
-        name: /Imagem da bebida 3-Mile Long Island Iced Tea/i,
-      });
-      expect(apiImage).toBeInTheDocument();
+      const alertMessage = 'Sorry, we haven\'t found any recipes for these filters.';
+      expect(global.alert).toHaveBeenCalledTimes(1);
+      expect(global.alert).toHaveBeenCalledWith(alertMessage);
     });
   });
 });
