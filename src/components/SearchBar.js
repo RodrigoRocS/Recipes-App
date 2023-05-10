@@ -25,9 +25,6 @@ function SearchBar() {
   };
 
   useEffect(() => {
-    if (recipes?.ingredients) {
-      history.push(`${path}/${recipes?.ingredients[0].idIngredient}`);
-    }
     if (recipes?.drinks?.length === 1) {
       history.push(`/drinks/${recipes?.drinks[0].idDrink}`);
     }
