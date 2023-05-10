@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useLocation, useHistory, Link } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import SearchCard from '../components/SearchCard';
 import '../styles/Recipes.css';
 
 function Recipes() {
+  const local = useLocation();
+  const path = local.pathname;
+  const rightPath = path.charAt(1).toUpperCase() + path.substring(2, path.length);
+
   const history = useHistory();
   const location = history.location.pathname;
   const [isLoading, setisLoading] = useState({ isLoading: false });
@@ -70,6 +77,10 @@ function Recipes() {
 
   return (
     <div>
+
+      <Header title={ rightPath } search />
+      <SearchCard />
+
       <button
         onClick={ () => handleCategoryClick('All') }
         data-testid="All-category-filter"
@@ -134,6 +145,7 @@ function Recipes() {
             )
           ))
       }
+      <Footer />
     </div>
   );
 }
