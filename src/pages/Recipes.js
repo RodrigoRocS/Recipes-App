@@ -13,16 +13,33 @@ function Recipes() {
   const maxcard = 11;
 
   const handleCategoryClick = async (arg) => {
-    if (arg === selectedCategory || arg === 'All') {
-      const response = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?c=');
-      const data3 = await response.json();
-      setCardArray(data3.meals);
-    } if (arg !== undefined) {
-      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${arg}`);
-      const data3 = await response.json();
-      setCardArray(data3.meals);
+    if (location === '/meals') {
+      if (arg === selectedCategory || arg === 'All') {
+        console.log(arg);
+        const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+        const data3 = await response.json();
+        setCardArray(data3.meals);
+        return setSelectedCategory('');
+      } if (arg !== undefined) {
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${arg}`);
+        const data3 = await response.json();
+        setCardArray(data3.meals);
+        return setSelectedCategory(arg);
+      }
+    } if (location === '/drinks') {
+      if (arg === selectedCategory || arg === 'All') {
+        const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+        const data3 = await response.json();
+        console.log(data3);
+        setCardArray(data3.drinks);
+        return setSelectedCategory('');
+      } if (arg !== undefined) {
+        const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${arg}`);
+        const data3 = await response.json();
+        setCardArray(data3.drinks);
+        return setSelectedCategory(arg);
+      }
     }
-    setSelectedCategory(arg);
   };
 
   useEffect(() => {
@@ -39,8 +56,6 @@ function Recipes() {
       }
       if (location === '/meals' && selectedCategory === undefined) {
         setisLoading(true);
-        console.log(selectedCategory);
-        console.log('renderisou');
         const respCardList = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const respCategoryList = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
         const data1 = await respCardList.json();
@@ -56,7 +71,7 @@ function Recipes() {
   return (
     <div>
       <button
-        onClick={ () => handleCategoryClick('all') }
+        onClick={ () => handleCategoryClick('All') }
         data-testid="All-category-filter"
       >
         All
@@ -75,21 +90,21 @@ function Recipes() {
             )
           ))
       }
-
       {
-
         isLoading ? <>loading</>
           : cardArray.length > 0
           && cardArray.map((item, index) => (
             index <= maxcard && (
               <div
                 key={ index }
-                data-testid={ `${index}-recipe-card` }
               >
 
                 {
                   location === '/meals' ? (
-                    <Link to={ `/meals/${item.idMeal}` }>
+                    <Link
+                      to={ `/meals/${item.idMeal}` }
+                      data-testid={ `${index}-recipe-card` }
+                    >
                       <img
                         className="img"
                         id={ index }
@@ -100,7 +115,10 @@ function Recipes() {
                       <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
                     </Link>
                   ) : (
-                    <Link to={ `/drinks/${item.idDrink}` }>
+                    <Link
+                      to={ `/drinks/${item.idDrink}` }
+                      data-testid={ `${index}-recipe-card` }
+                    >
                       <img
                         className="img"
                         id={ index }
