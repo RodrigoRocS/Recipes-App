@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
+import '../styles/Recipes.css';
 
 function Recipes() {
   const history = useHistory();
@@ -9,7 +10,7 @@ function Recipes() {
   const [cardArray, setCardArray] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const maxcategory = 4;
-  const maxcard = 12;
+  const maxcard = 11;
 
   const handleCategoryClick = async (arg) => {
     if (arg === selectedCategory || arg === 'All') {
@@ -90,6 +91,7 @@ function Recipes() {
                   location === '/meals' ? (
                     <Link to={ `/meals/${item.idMeal}` }>
                       <img
+                        className="img"
                         id={ index }
                         src={ item.strMealThumb }
                         alt="strMealThumb"
@@ -100,6 +102,7 @@ function Recipes() {
                   ) : (
                     <Link to={ `/drinks/${item.idDrink}` }>
                       <img
+                        className="img"
                         id={ index }
                         src={ item.strDrinkThumb }
                         alt="strDrinkThumb"
