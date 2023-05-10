@@ -21,6 +21,7 @@ function SearchBar() {
     if (searchType === 'firstLetter' && searchName.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else { setFetchRequest({ type: searchType, name: searchName, path }); }
+    setSearchName('');
   };
 
   useEffect(() => {
@@ -33,6 +34,7 @@ function SearchBar() {
     if (recipes?.drinks === null || recipes?.meals === null
       || recipes?.ingredients === null) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      console.log('fui chamado');
     }
   }, [recipes, history, path]);
 

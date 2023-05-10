@@ -4,8 +4,8 @@ import SearchContext from './SearchContext';
 import useFetch from '../hooks/useFetch';
 
 export default function SearchProvider({ children }) {
-  const [searchName, setSearchName] = useState();
-  const [searchType, setSearchType] = useState();
+  const [searchName, setSearchName] = useState('');
+  const [searchType, setSearchType] = useState('');
   const [fetchRequest, setFetchRequest] = useState({});
 
   const [fetchRecipe, recipeData, isFetchRecipeLoading] = useFetch([]);
@@ -43,7 +43,6 @@ export default function SearchProvider({ children }) {
 
   const handleArray = useCallback((arr) => {
     const { path } = fetchRequest;
-    console.log(path);
     const MN = 12;
     const recipeType = path === '/meals' ? 'meals' : 'drinks';
     if (!Array.isArray(arr[recipeType]) || arr[recipeType].length <= 1) {
