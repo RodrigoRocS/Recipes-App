@@ -1,56 +1,56 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import useFetch from '../hooks/useFetch';
 
 function Recipes() {
   const history = useHistory();
   const location = history.location.pathname;
-  const [fetchData, data, isLoading] = useFetch([]);
-  const [recipeArrays, setRecipeArrays] = useState({ firstTwelve: [], remaining: [] });
-  // const [isSearch, setIsSearch] = useState({ isSearching: false });
+  const [isLoading, setisLoading] = useState({ isLoading: false });
   const [categoryArray, setCategoryArray] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [cardArray, setCardArray] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
   const maxcategory = 4;
-  const handleArray = useCallback((arr) => {
-    const MN = 12;
-    const recipeType = location === '/meals' ? 'meals' : 'drinks';
-    if (!Array.isArray(arr[recipeType]) || arr[recipeType].length <= 1) {
-      return { firstTwelve: [], remaining: [] };
+  const maxcard = 12;
+
+  const handleCategoryClick = async (arg) => {
+    if (arg === selectedCategory || arg === 'All') {
+      const response = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?c=');
+      const data3 = await response.json();
+      setCardArray(data3.meals);
+    } if (arg !== undefined) {
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${arg}`);
+      const data3 = await response.json();
+      setCardArray(data3.meals);
     }
-    const firstTwelve = arr[recipeType].slice(0, MN);
-    const remaining = arr[recipeType].slice(MN);
-
-    return { firstTwelve, remaining };
-  }, [location]);
-
-  const handleCategoryClick = (arg) => {
-    console.log(arg);
     setSelectedCategory(arg);
   };
+
   useEffect(() => {
-    const fetchCategoryList = async () => {
-      if (location === '/drinks') {
-        await fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-        const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
-        const data2 = await response.json();
+    const handlefetch = async () => {
+      if (location === '/drinks' && selectedCategory === undefined) {
+        setisLoading(true);
+        const respCardList = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+        const respCategoryList = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
+        const data1 = await respCardList.json();
+        const data2 = await respCategoryList.json();
+        setCardArray(data1.drinks);
         setCategoryArray(data2.drinks);
+        setisLoading(false);
       }
-      if (location === '/meals') {
-        const response = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
-        const data2 = await response.json();
+      if (location === '/meals' && selectedCategory === undefined) {
+        setisLoading(true);
+        console.log(selectedCategory);
+        console.log('renderisou');
+        const respCardList = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+        const respCategoryList = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
+        const data1 = await respCardList.json();
+        const data2 = await respCategoryList.json();
+        setCardArray(data1.meals);
         setCategoryArray(data2.meals);
-        fetchData('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+        setisLoading(false);
       }
     };
-
-    fetchCategoryList();
-  }, [fetchData, location]);
-
-  useEffect(() => {
-    const resp = handleArray(data);
-    console.log(resp);
-    setRecipeArrays(resp);
-  }, [handleArray, data]);
+    handlefetch();
+  }, [location, selectedCategory]);
 
   return (
     <div>
@@ -74,38 +74,43 @@ function Recipes() {
             )
           ))
       }
+
       {
+
         isLoading ? <>loading</>
-          : recipeArrays.firstTwelve.length > 0
-          && recipeArrays.firstTwelve.map((item, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recipe-card` }
-            >
-              {
-                location === '/meals' ? (
-                  <Link to={ `/meals/${item.idMeal}` }>
-                    <img
-                      id={ index }
-                      src={ item.strMealThumb }
-                      alt="strMealThumb"
-                      data-testid={ `${index}-card-img` }
-                    />
-                    <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
-                  </Link>
-                ) : (
-                  <Link to={ `/drinks/${item.idDrink}` }>
-                    <img
-                      id={ index }
-                      src={ item.strDrinkThumb }
-                      alt="strDrinkThumb"
-                      data-testid={ `${index}-card-img` }
-                    />
-                    <div data-testid={ `${index}-card-name` }>{item.strDrink}</div>
-                  </Link>
-                )
-              }
-            </div>
+          : cardArray.length > 0
+          && cardArray.map((item, index) => (
+            index <= maxcard && (
+              <div
+                key={ index }
+                data-testid={ `${index}-recipe-card` }
+              >
+
+                {
+                  location === '/meals' ? (
+                    <Link to={ `/meals/${item.idMeal}` }>
+                      <img
+                        id={ index }
+                        src={ item.strMealThumb }
+                        alt="strMealThumb"
+                        data-testid={ `${index}-card-img` }
+                      />
+                      <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
+                    </Link>
+                  ) : (
+                    <Link to={ `/drinks/${item.idDrink}` }>
+                      <img
+                        id={ index }
+                        src={ item.strDrinkThumb }
+                        alt="strDrinkThumb"
+                        data-testid={ `${index}-card-img` }
+                      />
+                      <div data-testid={ `${index}-card-name` }>{item.strDrink}</div>
+                    </Link>
+                  )
+                }
+              </div>
+            )
           ))
       }
     </div>
