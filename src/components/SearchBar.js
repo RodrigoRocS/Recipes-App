@@ -21,6 +21,7 @@ function SearchBar() {
     if (searchType === 'firstLetter' && searchName.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else { setFetchRequest({ type: searchType, name: searchName, path }); }
+    setSearchName('');
   };
 
   useEffect(() => {
