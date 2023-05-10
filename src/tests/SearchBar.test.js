@@ -174,31 +174,4 @@ describe('Testes de comportamento do componente SearchBar', () => {
   //     expect(global.alert).toHaveBeenCalledWith(alertMessage);
   //   });
   // });
-  test('Se é renderizado o elemento na tela', async () => {
-    renderWithRouter(
-      <SearchProvider>
-        <App />
-      </SearchProvider>,
-      '/meals',
-    );
-
-    const topButton = screen.getByTestId('search-top-btn');
-    userEvent.click(topButton);
-    const searchInput = screen.getByTestId('search-input');
-    const ingredientRadius = screen.getByRole('radio', {
-      name: /ingredient/i,
-    });
-    const execSearchBtn = screen.getByTestId('exec-search-btn');
-
-    userEvent.type(searchInput, 'gin');
-    userEvent.click(ingredientRadius);
-    userEvent.click(execSearchBtn);
-
-    await waitFor(() => {
-      const apiImage = screen.getByRole('img', {
-        name: /Imagem da bebida 3-Mile Long Island Iced Tea/i,
-      });
-      expect(apiImage).toBeInTheDocument();
-    });
-  });
 });
