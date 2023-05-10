@@ -12,10 +12,15 @@ function IngredientsList() {
   const checkboxValues = Object.values(checkboxesState);
 
   const mappedIngredients = ingredients.map((ingredient, index) => (
-    <label key={ ingredient } className={ checkboxValues[index] ? 'checked' : '' }>
+    <label
+      key={ ingredient }
+      data-testid={ `${index}-ingredient-step` }
+      className={ checkboxValues[index] ? 'checked' : '' }
+      htmlFor={ `${index}-ingredient-step` }
+    >
       <input
+        id={ `${index}-ingredient-step` }
         type="checkbox"
-        data-testid={ `${index}-ingredient-step` }
         name={ ingredient }
         onChange={ handleChecks }
         checked={ checkboxValues[index] }

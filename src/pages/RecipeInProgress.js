@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import RecipeInProgressContext from '../contexts/RecipeInProgressContext';
 import IngredientsList from '../components/IngredientsList';
@@ -14,18 +14,30 @@ function RecipeInProgress() {
     handleShareRecipes,
     copied,
     checkboxesState,
+    setPathname,
+    finishRecipe,
   } = useContext(RecipeInProgressContext);
 
   const {
     strMeal,
+    strDrink,
     strCategory,
-    /* strMealThumb, */
+    strMealThumb,
+    strDrinkThumb,
     strInstructions,
   } = recipe.length !== 0 && recipe[0];
 
   const history = useHistory();
+  useEffect(() => {
+    setPathname(history.location.pathname);
+  }, [history.location.pathname, setPathname]);
 
   const checkboxesValue = Object.values(checkboxesState);
+
+  const handleFinshRecipe = () => {
+    finishRecipe();
+    history.push('/done-recipes')
+  }
 
   return (
     <div>
@@ -33,9 +45,9 @@ function RecipeInProgress() {
         <img
           data-testid="recipe-photo"
           alt="recipe-ilustration"
-          src={ '#'/* strMealThumb */ }
+          src={ strMealThumb || strDrinkThumb }
         />
-        <h2 data-testid="recipe-title">{ strMeal }</h2>
+        <h2 data-testid="recipe-title">{ strMeal || strDrink }</h2>
         <span data-testid="recipe-category">{ strCategory }</span>
         {copied && <span>Link copied!</span>}
         <div>
@@ -50,6 +62,7 @@ function RecipeInProgress() {
           <button
             data-testid="favorite-btn"
             onClick={ handleFavoriteRecipes }
+            src={ isFavorite ? unfavoriteIcon : favoriteIcon }
           >
             {isFavorite
               ? <img src={ unfavoriteIcon } alt="unfavorite icon" />
@@ -70,7 +83,7 @@ function RecipeInProgress() {
       <button
         data-testid="finish-recipe-btn"
         disabled={ !checkboxesValue.every((check) => check === true) }
-        onClick={ () => history.push('/done-recipes') }
+        onClick={ handleFinshRecipe }
       >
         Finish Recipe
       </button>

@@ -10,12 +10,11 @@ import {
   removeFavoriteRecipes,
   setFavoriteRecipes,
 } from '../services/FavoriteRecipesLocalStorage';
+import { setDoneRecipes } from '../services/DoneRecipesLocalStorage';
 
-const RECIPES_API = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
-const RECIPE_ID = '53071';
+const MEALS_API = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 
-/* const DRINKS_API = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
-const DRINK_ID = '11002'; */
+const DRINKS_API = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
 const timeCopy = 5000;
 
@@ -25,26 +24,41 @@ function RecipeInProgressProvider({ children }) {
   const [checkboxesState, setCheckboxesState] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [pathname, setPathname] = useState();
   const recipeObj = recipe[0];
   const {
     idMeal,
+    idDrink,
     strArea,
     strCategory,
     strMeal,
+    strDrink,
     strMealThumb,
+    strDrinkThumb,
+    strAlcoholic,
+    strTags,
   } = recipeObj !== undefined && recipeObj;
 
   useEffect(() => {
-    const initialFetch = async () => {
-      const response = await fetch(`${RECIPES_API}${RECIPE_ID}`);
-      const data = await response.json();
-      const { meals, drinks } = data;
-      setRecipe(meals || drinks);
+    const path = pathname !== undefined && pathname;
+    const id = path.toString().replace(/\D/g, '');
+    const initialFetch = async () => {      
+      if (/meals/.test(path)) {
+        const response = await fetch(`${MEALS_API}${id}`);
+        const data = await response.json();
+        const { meals } = data;
+        setRecipe(meals);
+      } else {
+        const response = await fetch(`${DRINKS_API}${id}`);
+        const data = await response.json();
+        const { drinks } = data;
+        setRecipe(drinks);
+      }
     };
-    initialFetch();
-  }, []);
+    id && initialFetch();
+  }, [pathname]);
 
-  // ESTE BLOCO SETA OS ESTADOS INICIAIS PRA LÓGICA DE INGREDIENTES CHECKADOS.
+  // ESTE BLOCO SETA OS ESTADOS INICIAIS PRA LÓGICA DE INGREDIENTES CHECKADOS
 
   const saveCheckboxStates = useCallback(() => {
     const localRecipes = getRecipesInProgress();
@@ -63,18 +77,21 @@ function RecipeInProgressProvider({ children }) {
         return obj;
       }, {});
 
-    const ingredientValues = Object.values(ingredientes);
-    const measureValues = Object.values(measures);
+    const ingredientValues = Object.values(ingredientes)
+      .filter((ingredient) => ingredient !== null);
+    const measureValues = Object.values(measures)
+      .filter((measure) => measure !== null);
 
     const mergedIngredients = ingredientValues
       .map((ingredient, index) => (`${ingredient} - ${measureValues[index]}`));
     const formatIngredients = mergedIngredients
-      .filter((ingredient) => ingredient !== ' -  ');
+      .filter((ingredient) => ingredient !== ' -  ')
+      .filter((ingredient2) => ingredient2 !== ' - ');
 
     setIngredients(formatIngredients);
 
-    if (localRecipes[idMeal]) {
-      setCheckboxesState(localRecipes[idMeal]);
+    if (localRecipes[idMeal || idDrink]) {
+      setCheckboxesState(localRecipes[idMeal || idDrink]);
       return;
     }
 
@@ -84,13 +101,13 @@ function RecipeInProgressProvider({ children }) {
     }, {});
 
     setCheckboxesState(objCheckboxState);
-  }, [idMeal, recipe.length, recipeObj]);
+  }, [idDrink, idMeal, recipe.length, recipeObj]);
 
   useEffect(() => {
     saveCheckboxStates();
   }, [saveCheckboxStates]);
 
-  // ========================================================================
+  // ============ ESTE BLOCO LIDA COM A LÓGICA DOS CHECKBOXS ================
 
   const handleChecks = useCallback(({ target }) => {
     setCheckboxesState({
@@ -100,45 +117,51 @@ function RecipeInProgressProvider({ children }) {
   }, [checkboxesState]);
 
   useEffect(() => {
-    if (!idMeal) return;
-    setRecipesInProgress(idMeal, checkboxesState);
-  }, [checkboxesState, idMeal]);
+    if (!idMeal && !idDrink) return;
+    setRecipesInProgress(idMeal || idDrink, checkboxesState);
+  }, [checkboxesState, idDrink, idMeal]);
 
   // ========= ESTE BLOCO LIDA COM A LÓGICA DE FAVORITAR RECEITAS ===========
 
   const handleFavoriteRecipes = useCallback(() => {
     const localRecipes = getFavoriteRecipes();
-    const verify = localRecipes.some((receita) => receita.id === idMeal);
+    const verify = localRecipes.some((receita) => receita.id === idMeal || idDrink);
     if (verify) {
-      removeFavoriteRecipes(idMeal);
+      removeFavoriteRecipes(idMeal || idDrink);
       setIsFavorite(false);
       return;
     }
+
     const newRecipeObj = {
-      id: idMeal,
-      type: 'meal',
-      nationality: strArea,
+      id: idMeal || idDrink,
+      type: idMeal ? 'meal' : 'drink',
+      nationality: strArea || '',
       category: strCategory,
-      alcoholicOrNot: false,
-      name: strMeal,
-      image: strMealThumb,
+      alcoholicOrNot: strAlcoholic || '',
+      name: strMeal || strDrink,
+      image: strMealThumb || strDrinkThumb,
     };
     setFavoriteRecipes(newRecipeObj);
     setIsFavorite(true);
-  }, [idMeal, strArea, strCategory, strMeal, strMealThumb]);
+  }, [
+    idDrink,
+    idMeal,
+    strAlcoholic,
+    strArea, strCategory, strDrink, strDrinkThumb, strMeal, strMealThumb]);
 
   useEffect(() => {
     const localRecipes = getFavoriteRecipes();
-    const verify = localRecipes.some((receita) => receita.id === idMeal);
+    const verify = localRecipes.some((receita) => receita.id === idMeal || idDrink);
     setIsFavorite(verify);
-  }, [idMeal]);
+  }, [idDrink, idMeal]);
 
   // ======= ESTE BLOCO LIDA COM A LÓGICA DE COMPARTILHAR RECEITAS ==========
 
   const handleShareRecipes = useCallback(async () => {
-    await navigator.clipboard.writeText('Este é um texto legal');
+    const path = pathname.replace("/in-progress", "");
+    await navigator.clipboard.writeText(`http://localhost:3000${path}`);
     setCopied(true);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -147,6 +170,26 @@ function RecipeInProgressProvider({ children }) {
 
     return () => clearTimeout(timer);
   }, [copied]);
+
+  // ========================================================================
+  
+  const finishRecipe = () => {
+    const newStrTags = strTags && strTags.split(",").map(palavra => palavra.trim());
+
+    const newRecipeObj = {
+      id: idMeal || idDrink,
+      type: idMeal ? 'meal' : 'drink',
+      nationality: strArea || '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic || '',
+      name: strMeal || strDrink,
+      image: strMealThumb || strDrinkThumb,
+      tags: newStrTags || [],
+      doneDate: new Date(),
+    };
+
+    setDoneRecipes(newRecipeObj);
+  };
 
   // ========================================================================
 
@@ -159,6 +202,8 @@ function RecipeInProgressProvider({ children }) {
     isFavorite,
     handleShareRecipes,
     copied,
+    setPathname,
+    finishRecipe,
   }), [
     recipe,
     ingredients,
@@ -168,6 +213,8 @@ function RecipeInProgressProvider({ children }) {
     isFavorite,
     handleShareRecipes,
     copied,
+    setPathname,
+    finishRecipe,
   ]);
 
   return (

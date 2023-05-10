@@ -12,3 +12,11 @@ export const setRecipesInProgress = (recipeId, recipeStates) => {
   };
   localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipes));
 };
+
+export const removeRecipesInProgress = (id) => {
+  const localRecipesInProgress = getRecipesInProgress();
+
+  delete localRecipesInProgress[id];
+
+  localStorage.setItem('inProgressRecipes', JSON.stringify(localRecipesInProgress));
+};
