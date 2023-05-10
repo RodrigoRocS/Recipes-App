@@ -7,7 +7,6 @@ import searchIcon from '../images/searchIcon.svg';
 
 function Header({ title, search }) {
   const [searchBar, setSearchBar] = useState(false);
-  console.log(searchBar);
 
   if (search) {
     return (

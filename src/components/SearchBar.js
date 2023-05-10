@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import SearchContext from '../contexts/SearchContext';
 
 function SearchBar() {
@@ -12,14 +12,34 @@ function SearchBar() {
     searchType,
     setSearchType,
     setFetchRequest,
-
+    recipes,
   } = useContext(SearchContext);
+
+  const history = useHistory();
 
   const handleClick = () => {
     if (searchType === 'firstLetter' && searchName.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else { setFetchRequest({ type: searchType, name: searchName, path }); }
+    setSearchName('');
   };
+
+  useEffect(() => {
+    if (recipes?.ingredients) {
+      history.push(`${path}/${recipes?.ingredients[0].idIngredient}`);
+    }
+    if (recipes?.drinks?.length === 1) {
+      history.push(`/drinks/${recipes?.drinks[0].idDrink}`);
+    }
+    if (recipes?.meals?.length === 1) {
+      history.push(`/meals/${recipes?.meals[0].idMeal}`);
+    }
+    if (recipes?.drinks === null || recipes?.meals === null
+      || recipes?.ingredients === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      console.log('fui chamado');
+    }
+  }, [recipes, history, path]);
 
   return (
     <div>
