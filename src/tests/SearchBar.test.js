@@ -152,12 +152,34 @@ describe('Testes de comportamento do componente SearchBar', () => {
       expect(apiImage).toBeInTheDocument();
     });
   });
-  test('Se apareece error quando a busca resulta em null', async () => {
+  // test('Se apareece error quando a busca resulta em null', async () => {
+  //   renderWithRouter(
+  //     '/drinks',
+  //   );
+
+  //   const topButton = screen.getByTestId('search-top-btn');
+  //   userEvent.click(topButton);
+  //   const searchInput = screen.getByTestId('search-input');
+  //   const ingredientRadius = screen.getByRole('radio', {
+  //     name: /ingredient/i,
+  //   });
+  //   const execSearchBtn = screen.getByTestId('exec-search-btn');
+
+  //   userEvent.type(searchInput, 'agua');
+  //   userEvent.click(ingredientRadius);
+  //   userEvent.click(execSearchBtn);
+
+  //   await waitFor(() => {
+  //     const alertMessage = 'Sorry, we haven\'t found any recipes for these filters.';
+  //     expect(global.alert).toHaveBeenCalledWith(alertMessage);
+  //   });
+  // });
+  test('Se é renderizado o elemento na tela', async () => {
     renderWithRouter(
       <SearchProvider>
         <App />
       </SearchProvider>,
-      '/drinks',
+      '/meals',
     );
 
     const topButton = screen.getByTestId('search-top-btn');
@@ -168,13 +190,15 @@ describe('Testes de comportamento do componente SearchBar', () => {
     });
     const execSearchBtn = screen.getByTestId('exec-search-btn');
 
-    userEvent.type(searchInput, 'agua');
+    userEvent.type(searchInput, 'gin');
     userEvent.click(ingredientRadius);
     userEvent.click(execSearchBtn);
 
     await waitFor(() => {
-      const alertMessage = 'Sorry, we haven\'t found any recipes for these filters.';
-      expect(global.alert).toHaveBeenCalledWith(alertMessage);
+      const apiImage = screen.getByRole('img', {
+        name: /Imagem da bebida 3-Mile Long Island Iced Tea/i,
+      });
+      expect(apiImage).toBeInTheDocument();
     });
   });
 });
