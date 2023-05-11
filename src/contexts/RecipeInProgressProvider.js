@@ -42,7 +42,7 @@ function RecipeInProgressProvider({ children }) {
   useEffect(() => {
     const path = pathname !== undefined && pathname;
     const id = path.toString().replace(/\D/g, '');
-    const initialFetch = async () => {      
+    const initialFetch = async () => {
       if (/meals/.test(path)) {
         const response = await fetch(`${MEALS_API}${id}`);
         const data = await response.json();
@@ -55,7 +55,8 @@ function RecipeInProgressProvider({ children }) {
         setRecipe(drinks);
       }
     };
-    id && initialFetch();
+
+    if (id) initialFetch();
   }, [pathname]);
 
   // ESTE BLOCO SETA OS ESTADOS INICIAIS PRA LÓGICA DE INGREDIENTES CHECKADOS
@@ -158,7 +159,7 @@ function RecipeInProgressProvider({ children }) {
   // ======= ESTE BLOCO LIDA COM A LÓGICA DE COMPARTILHAR RECEITAS ==========
 
   const handleShareRecipes = useCallback(async () => {
-    const path = pathname.replace("/in-progress", "");
+    const path = pathname.replace('/in-progress', '');
     await navigator.clipboard.writeText(`http://localhost:3000${path}`);
     setCopied(true);
   }, [pathname]);
@@ -172,9 +173,9 @@ function RecipeInProgressProvider({ children }) {
   }, [copied]);
 
   // ========================================================================
-  
-  const finishRecipe = () => {
-    const newStrTags = strTags && strTags.split(",").map(palavra => palavra.trim());
+
+  const finishRecipe = useCallback(() => {
+    const newStrTags = strTags && strTags.split(',').map((palavra) => palavra.trim());
 
     const newRecipeObj = {
       id: idMeal || idDrink,
@@ -189,7 +190,12 @@ function RecipeInProgressProvider({ children }) {
     };
 
     setDoneRecipes(newRecipeObj);
-  };
+  }, [
+    idDrink,
+    idMeal,
+    strAlcoholic,
+    strArea, strCategory, strDrink, strDrinkThumb, strMeal, strMealThumb, strTags,
+  ]);
 
   // ========================================================================
 

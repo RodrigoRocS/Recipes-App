@@ -36,8 +36,8 @@ function RecipeInProgress() {
 
   const handleFinshRecipe = () => {
     finishRecipe();
-    history.push('/done-recipes')
-  }
+    history.push('/done-recipes');
+  };
 
   return (
     <div>
