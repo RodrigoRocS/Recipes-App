@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-function useFetch(initialState = null) {
+function useFetch(initialState = []) {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(initialState);
@@ -15,7 +15,6 @@ function useFetch(initialState = null) {
         throw errorData.message;
       }
       const json = await response.json();
-
       setData(json);
     } catch (error) {
       setErrorMessage(error);
