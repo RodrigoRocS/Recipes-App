@@ -6,6 +6,7 @@
     "node": "16 || 18"
   },
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "clipboard-copy": "^4.0.1",
     "css-loader": "^6.7.3",
     "prop-types": "^15.8.1",
