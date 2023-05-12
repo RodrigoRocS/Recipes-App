@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import Recomendations from '../components/Recomendations';
+import './RecipesDetails.css';
 
 function RecipeDetails() {
   const { id } = useParams();
@@ -68,7 +69,7 @@ function RecipeDetails() {
   return (
     <div>
       <h1 data-testid="recipe-title">{ recipeTitle }</h1>
-      <img src={ recipeImg } alt="" data-testid="recipe-photo" width="350px" />
+      <img src={ recipeImg } alt="" data-testid="recipe-photo" width="100%" />
       <p data-testid="recipe-category">{recipeCategory}</p>
       <ol>
         { ingredients?.map((e, i) => (
@@ -79,8 +80,8 @@ function RecipeDetails() {
       {path === '/meals' && (
         <iframe
           data-testid="video"
-          width="560"
-          height="315"
+          width="100%"
+          height="240"
           src={ `https://www.youtube.com/embed/${recipeDataId?.meals?.[0]?.strYoutube.slice(MN)}` }
           title={ recipeTitle }
           allow="accelerometer;
@@ -89,6 +90,13 @@ function RecipeDetails() {
         />
       )}
       <Recomendations />
+      <button
+        data-testid="start-recipe-btn"
+        className="btn-start-recipe"
+      >
+        Start Recipe
+
+      </button>
     </div>
   );
 }

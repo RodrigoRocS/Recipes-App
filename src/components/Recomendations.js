@@ -1,6 +1,7 @@
 import { useRouteMatch } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import useFetch from '../hooks/useFetch';
+import './Recomendations.css';
 
 function Recomendations() {
   const match = useRouteMatch(['/meals', '/drinks']);
@@ -17,10 +18,32 @@ function Recomendations() {
     }
   }, [path, fetchRecipeRec]);
 
-  console.log(recipeDataRec);
+  const pathName = path === '/meals' ? 'drinks' : 'meals';
+  const MN = 6;
+  const sixRecom = recipeDataRec[pathName]?.slice(0, MN);
 
   return (
-    <div />
+    <div className="recommendations-container">
+      <h2>Recommended</h2>
+      {sixRecom?.map((recipe, index) => (
+        <div
+          key={ pathName === 'meals' ? recipe.idMeal : recipe.idDrink }
+          className="recommendation-card"
+          data-testid={ `${index}-recommendation-card` }
+        >
+          <img
+            width="100%"
+            data-testid={ `${index}-card-img` }
+            src={ pathName === 'meals' ? recipe.strMealThumb : recipe.strDrinkThumb }
+            alt={ pathName === 'meals' ? `Imagem do prato 
+            ${recipe.strMeal}` : `Imagem da bebida ${recipe.strDrink}` }
+          />
+          <p data-testid={ `${index}-recommendation-title` }>
+            { pathName === 'meals' ? recipe.strMeal : recipe.strDrink }
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }
 
