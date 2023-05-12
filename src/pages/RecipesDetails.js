@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import Recomendations from '../components/Recomendations';
@@ -9,6 +9,7 @@ function RecipeDetails() {
   const match = useRouteMatch(['/meals', '/drinks']);
   const path = match?.path;
   const [fetchRecipeId, recipeDataId, isFetchRecipeIdLoading] = useFetch([]);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     const MEALSID_URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
@@ -19,6 +20,11 @@ function RecipeDetails() {
       fetchRecipeId(DRINKSID_URL);
     }
   }, [fetchRecipeId, id, path]);
+
+  useEffect(() => {
+    setIsDone(JSON.parse(localStorage.getItem('doneRecipes'))
+      ?.some((e) => e.id === id));
+  }, [id]);
 
   const takeIngredients = () => {
     if (!isFetchRecipeIdLoading) {
@@ -90,13 +96,14 @@ function RecipeDetails() {
         />
       )}
       <Recomendations />
-      <button
-        data-testid="start-recipe-btn"
-        className="btn-start-recipe"
-      >
-        Start Recipe
-
-      </button>
+      {!isDone && (
+        <button
+          data-testid="start-recipe-btn"
+          className="btn-start-recipe"
+        >
+          Start Recipe
+        </button>
+      )}
     </div>
   );
 }

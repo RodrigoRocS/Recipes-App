@@ -1,10 +1,10 @@
-.recommendations-container {
+.recom-container {
   overflow-x: scroll;
   white-space: nowrap;
 }
 
-.recommendation-card {
+.recom-card {
   display: inline-block;
   margin-right: 10px;
-  width: 170px;
+  width: 200px;
 }
