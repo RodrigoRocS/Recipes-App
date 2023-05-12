@@ -23,12 +23,12 @@ function Recomendations() {
   const sixRecom = recipeDataRec[pathName]?.slice(0, MN);
 
   return (
-    <div className="recommendations-container">
+    <div className="recom-container">
       <h2>Recommended</h2>
       {sixRecom?.map((recipe, index) => (
         <div
           key={ pathName === 'meals' ? recipe.idMeal : recipe.idDrink }
-          className="recommendation-card"
+          className="recom-card"
           data-testid={ `${index}-recommendation-card` }
         >
           <img
