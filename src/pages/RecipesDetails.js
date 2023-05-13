@@ -1,15 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import RecipeInProgressContext from '../contexts/RecipeInProgressContext';
 import useFetch from '../hooks/useFetch';
 import Recomendations from '../components/Recomendations';
+import shareIcon from '../images/shareIcon.svg';
+import favoriteIcon from '../images/whiteHeartIcon.svg';
+import unfavoriteIcon from '../images/blackHeartIcon.svg';
 import './RecipesDetails.css';
 
 function RecipeDetails() {
   const { id } = useParams();
   const match = useRouteMatch(['/meals', '/drinks']);
+  const location = useLocation();
+  const pathName = location.pathname;
+  const history = useHistory();
   const path = match?.path;
   const [fetchRecipeId, recipeDataId, isFetchRecipeIdLoading] = useFetch([]);
   const [isDone, setIsDone] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
+
+  const {
+    handleFavoriteRecipes,
+    isFavorite,
+    handleShareRecipes,
+    copied,
+    setPathname,
+  } = useContext(RecipeInProgressContext);
 
   useEffect(() => {
     const MEALSID_URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
@@ -25,6 +41,16 @@ function RecipeDetails() {
     setIsDone(JSON.parse(localStorage.getItem('doneRecipes'))
       ?.some((e) => e.id === id));
   }, [id]);
+
+  useEffect(() => {
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || {};
+    const inProgressKey = Object.keys(inProgressRecipes).some((e) => e === id);
+    setInProgress(inProgressKey);
+  }, [id]);
+
+  useEffect(() => {
+    setPathname(history.location.pathname);
+  }, [history.location.pathname, setPathname]);
 
   const takeIngredients = () => {
     if (!isFetchRecipeIdLoading) {
@@ -76,6 +102,25 @@ function RecipeDetails() {
     <div>
       <h1 data-testid="recipe-title">{ recipeTitle }</h1>
       <img src={ recipeImg } alt="" data-testid="recipe-photo" width="100%" />
+      {copied && <span>Link copied!</span>}
+      <div>
+        <button
+          data-testid="share-btn"
+          onClick={ handleShareRecipes }
+        >
+          <img src={ shareIcon } alt="share icon" />
+        </button>
+
+        <button
+          data-testid="favorite-btn"
+          onClick={ handleFavoriteRecipes }
+          src={ isFavorite ? unfavoriteIcon : favoriteIcon }
+        >
+          {isFavorite
+            ? <img src={ unfavoriteIcon } alt="unfavorite icon" />
+            : <img src={ favoriteIcon } alt="favorite icon" />}
+        </button>
+      </div>
       <p data-testid="recipe-category">{recipeCategory}</p>
       <ol>
         { ingredients?.map((e, i) => (
@@ -98,10 +143,11 @@ function RecipeDetails() {
       <Recomendations />
       {!isDone && (
         <button
+          onClick={ () => history.push(`${pathName}/in-progress`) }
           data-testid="start-recipe-btn"
           className="btn-start-recipe"
         >
-          Start Recipe
+          {inProgress ? 'Continue Recipe' : 'Start Recipe'}
         </button>
       )}
     </div>
