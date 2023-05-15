@@ -1,0 +1,42 @@
+.header-container {
+  background-color: transparent;
+}
+
+.header-navbar {
+  align-items: center;
+  background-color: var(--accent-color2);
+  display: flex;
+  height: 52px;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.header-navbar div {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.header-navbar div button {
+  background-color: transparent;
+  border: unset;
+}
+
+.nav-logos-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  justify-content: center;
+  padding-bottom: 0.2rem;
+  padding-top: 0.5rem;
+}
+
+.nav-logos-container h1 {
+  color: var(--accent-color1);
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin: unset;
+  text-transform: uppercase;
+}
