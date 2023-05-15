@@ -19,30 +19,30 @@
   gap: 0.5rem;
 }
 
-.ingredients-list-container label input[type="checkbox"] {
+/* .ingredients-list-container label input:not( [ type = 'checkbox' ] ) {
+  align-items: center;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 17px;
-  height: 17px;
   background-color: transparent;
   border: 2px solid var(--accent-color2);
   border-radius: 3px;
+  display: flex;
+  height: 17px;
+  justify-content: center;
+  width: 17px;
 }
 
-.ingredients-list-container label input[type="checkbox"]:checked::before {
-  border-radius: 3px;
-  content: "V";
-  color: var(--base-color1);
-  display: flex;
-  justify-content: center;
+.ingredients-list-container label input:not( [ type = 'checkbox' ] ):checked:before {
   align-items: center;
-  width: 17px;
-  height: 17px;
   background-color: var(--accent-color2);
+  border-radius: 3px;
+  color: var(--base-color1);
+  content: 'V';
+  display: flex;
   font-size: 0.8rem;
   font-weight: 700;
-}
+  height: 17px;
+  justify-content: center;
+  width: 17px;
+} */

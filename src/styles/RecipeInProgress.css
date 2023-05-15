@@ -22,23 +22,33 @@
 }
 
 .recipe-in-progress-header-btns-container {
-background-color: rgba(0, 0, 0, 0.1);
-box-sizing: border-box;
-color: whitesmoke;
-display: flex;
-flex-direction: column-reverse;
-height: 162px;
-justify-content: space-between;
-padding: 0.5rem 1rem;
-position: absolute;
-width: 100%;
-z-index: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column-reverse;
+  height: 162px;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
 }
 
 .recipe-in-progress-header-btns-container nav {
   align-items: center;
   display: flex;
   justify-content: space-between;
+}
+
+.recipe-in-progress-instructions-container span {
+  border: solid 1px var(--font-color1);
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  width: 100%;
 }
 
 .recipe-in-progress-header-btns-container nav span {
@@ -64,9 +74,9 @@ z-index: 1;
 .recipe-in-progress-ingredients-container {
   display: flex;
   flex-direction: column;
+  left: 0;
   padding: 0.4rem 0.7rem;
   top: 162px;
-  left: 0;
   width: 100%;
 }
 
@@ -89,15 +99,6 @@ z-index: 1;
   padding-left: 0.6rem;
 }
 
-.recipe-in-progress-instructions-container span {
-  border: solid 1px var(--font-color1);
-  border-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  font-size: 0.8rem;
-  padding: 0.3rem 0.8rem;
-  width: 100%;
-}
 
 .finish-recipe-btn {
   background-color: var(--accent-color2);
@@ -106,7 +107,7 @@ z-index: 1;
   color: var(--base-color1);
   font-weight: 700;
   height: 40px;
-  margin-top: 0.4rem;
   margin-bottom: 0.8rem;
+  margin-top: 0.4rem;
   width: 93%;
 }
