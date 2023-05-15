@@ -14,6 +14,7 @@ function SearchBar() {
     setSearchType,
     setFetchRequest,
     recipes,
+    setIsSearch,
   } = useContext(SearchContext);
 
   const history = useHistory();
@@ -23,6 +24,7 @@ function SearchBar() {
       global.alert('Your search must have only 1 (one) character');
     } else { setFetchRequest({ type: searchType, name: searchName, path }); }
     setSearchName('');
+    setIsSearch(true);
   };
 
   useEffect(() => {

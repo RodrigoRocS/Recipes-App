@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import SearchContext from '../contexts/SearchContext';
 
 export default function SearchCard() {
@@ -21,17 +22,22 @@ export default function SearchCard() {
             key={ pathName === 'meals' ? recipe.idMeal : recipe.idDrink }
             data-testid={ `${index}-recipe-card` }
           >
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ pathName === 'meals' ? recipe.strMealThumb : recipe.strDrinkThumb }
-              alt={ pathName === 'meals' ? `Imagem do prato ${recipe.strMeal}`
-                : `Imagem da bebida ${recipe.strDrink}` }
-            />
-            <p
-              data-testid={ `${index}-card-name` }
+            <Link
+              to={ pathName === 'meals' ? `/meals/${recipe.idMeal}`
+                : `/drinks/${recipe.idDrink}` }
             >
-              { pathName === 'meals' ? recipe.strMeal : recipe.strDrink }
-            </p>
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ pathName === 'meals' ? recipe.strMealThumb : recipe.strDrinkThumb }
+                alt={ pathName === 'meals' ? `Imagem do prato ${recipe.strMeal}`
+                  : `Imagem da bebida ${recipe.strDrink}` }
+              />
+              <h5
+                data-testid={ `${index}-card-name` }
+              >
+                { pathName === 'meals' ? recipe.strMeal : recipe.strDrink }
+              </h5>
+            </Link>
           </div>
         ))}
 
