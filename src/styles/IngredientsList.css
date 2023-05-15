@@ -1,3 +1,48 @@
 .checked {
   text-decoration: line-through solid black;
 }
+
+.ingredients-list-container {
+  border: solid 1px var(--font-color1);
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.3rem 0.8rem;
+  width: 100%;
+}
+
+.ingredients-list-container label {
+  align-items: center;
+  display: flex;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+}
+
+.ingredients-list-container label input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 17px;
+  height: 17px;
+  background-color: transparent;
+  border: 2px solid var(--accent-color2);
+  border-radius: 3px;
+}
+
+.ingredients-list-container label input[type="checkbox"]:checked::before {
+  border-radius: 3px;
+  content: "V";
+  color: var(--base-color1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 17px;
+  height: 17px;
+  background-color: var(--accent-color2);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
