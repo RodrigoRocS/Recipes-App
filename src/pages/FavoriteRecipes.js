@@ -88,7 +88,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ shareIcon }
-                    alt=""
+                    alt="shareIcon"
                   />
                 </button>
                 <button
@@ -99,7 +99,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ blackHeartIcon }
-                    alt=""
+                    alt="heartIcon"
                   />
                 </button>
               </div>
@@ -128,7 +128,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ shareIcon }
-                    alt=""
+                    alt="shareIcon"
                   />
                 </button>
                 <button
@@ -139,7 +139,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ blackHeartIcon }
-                    alt=""
+                    alt="heartIcon"
                   />
                 </button>
               </div>
