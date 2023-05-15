@@ -52,7 +52,7 @@
   background-color: var(--accent-color2);
   border: unset;
   border-radius: 5px;
-  color: var(--base-color1);
+  color: var(--btn-color);
   font-weight: 700;
   height: 40px;
   width: 276px;

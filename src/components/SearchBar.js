@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import SearchContext from '../contexts/SearchContext';
+import '../styles/SearchBar.css';
 
 function SearchBar() {
   const location = useLocation();
@@ -39,7 +40,7 @@ function SearchBar() {
   }, [recipes, history, path]);
 
   return (
-    <div>
+    <div className="searchbar-container">
       <input
         type="text"
         placeholder="Search"
@@ -47,45 +48,50 @@ function SearchBar() {
         value={ searchName }
         onChange={ ({ target }) => setSearchName(target.value) }
       />
-      <label>
-        <input
-          type="radio"
-          name="search"
-          data-testid="ingredient-search-radio"
-          value="ingredient"
-          checked={ searchType === 'ingredient' }
-          onChange={ ({ target }) => setSearchType(target.value) }
-        />
-        Ingredient
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="search"
-          data-testid="name-search-radio"
-          value="name"
-          checked={ searchType === 'name' }
-          onChange={ ({ target }) => setSearchType(target.value) }
-        />
-        Name
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="search"
-          data-testid="first-letter-search-radio"
-          value="firstLetter"
-          checked={ searchType === 'firstLetter' }
-          onChange={ ({ target }) => setSearchType(target.value) }
-        />
-        First Letter
-      </label>
+
+      <div className="searchbar-radios-container">
+        <label>
+          <input
+            type="radio"
+            name="search"
+            data-testid="ingredient-search-radio"
+            value="ingredient"
+            checked={ searchType === 'ingredient' }
+            onChange={ ({ target }) => setSearchType(target.value) }
+          />
+          Ingredient
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="search"
+            data-testid="name-search-radio"
+            value="name"
+            checked={ searchType === 'name' }
+            onChange={ ({ target }) => setSearchType(target.value) }
+          />
+          Name
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="search"
+            data-testid="first-letter-search-radio"
+            value="firstLetter"
+            checked={ searchType === 'firstLetter' }
+            onChange={ ({ target }) => setSearchType(target.value) }
+          />
+          First Letter
+        </label>
+      </div>
+
       <button
         data-testid="exec-search-btn"
         onClick={ handleClick }
       >
         SEARCH
-
       </button>
     </div>
   );

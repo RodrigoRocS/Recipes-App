@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import useGetFormsContext from '../contexts/useGetFormContext';
-import logo from '../dev_images/logo Recipes App.svg';
+import logo from '../dev_images/logoRecipesApp.svg';
 import tomateImage from '../dev_images/tomate.svg';
 import '../styles/Login.css';
 
