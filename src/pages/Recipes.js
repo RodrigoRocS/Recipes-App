@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SearchCard from '../components/SearchCard';
 import '../styles/Recipes.css';
+import SearchContext from '../contexts/SearchContext';
 
 function Recipes() {
   const local = useLocation();
@@ -16,6 +17,7 @@ function Recipes() {
   const [categoryArray, setCategoryArray] = useState([]);
   const [cardArray, setCardArray] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
+  const { isSearch } = useContext(SearchContext);
   const maxcategory = 4;
   const maxcard = 11;
 
@@ -79,7 +81,6 @@ function Recipes() {
     <div>
 
       <Header title={ rightPath } search />
-      <SearchCard />
 
       <button
         onClick={ () => handleCategoryClick('All') }
@@ -101,50 +102,46 @@ function Recipes() {
             )
           ))
       }
-      {
-        isLoading ? <>loading</>
-          : cardArray.length > 0
-          && cardArray.map((item, index) => (
-            index <= maxcard && (
-              <div
-                key={ index }
-              >
 
-                {
-                  location === '/meals' ? (
-                    <Link
-                      to={ `/meals/${item.idMeal}` }
-                      data-testid={ `${index}-recipe-card` }
-                    >
-                      <img
-                        className="img"
-                        id={ index }
-                        src={ item.strMealThumb }
-                        alt="strMealThumb"
-                        data-testid={ `${index}-card-img` }
-                      />
-                      <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={ `/drinks/${item.idDrink}` }
-                      data-testid={ `${index}-recipe-card` }
-                    >
-                      <img
-                        className="img"
-                        id={ index }
-                        src={ item.strDrinkThumb }
-                        alt="strDrinkThumb"
-                        data-testid={ `${index}-card-img` }
-                      />
-                      <div data-testid={ `${index}-card-name` }>{item.strDrink}</div>
-                    </Link>
-                  )
-                }
+      { (
+        isSearch ? <SearchCard /> : (
+          cardArray.length > 0 && cardArray.map((item, index) => (
+            index <= maxcard && (
+              <div key={ index }>
+                {location === '/meals' ? (
+                  <Link
+                    to={ `/meals/${item.idMeal}` }
+                    data-testid={ `${index}-recipe-card` }
+                  >
+                    <img
+                      className="img"
+                      id={ index }
+                      src={ item.strMealThumb }
+                      alt="strMealThumb"
+                      data-testid={ `${index}-card-img` }
+                    />
+                    <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
+                  </Link>
+                ) : (
+                  <Link
+                    to={ `/drinks/${item.idDrink}` }
+                    data-testid={ `${index}-recipe-card` }
+                  >
+                    <img
+                      className="img"
+                      id={ index }
+                      src={ item.strDrinkThumb }
+                      alt="strDrinkThumb"
+                      data-testid={ `${index}-card-img` }
+                    />
+                    <div data-testid={ `${index}-card-name` }>{item.strDrink}</div>
+                  </Link>
+                )}
               </div>
             )
           ))
-      }
+        )
+      )}
       <Footer />
     </div>
   );
