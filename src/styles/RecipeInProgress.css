@@ -24,7 +24,7 @@
 .recipe-in-progress-header-btns-container {
   background-color: rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  color: whitesmoke;
+  color: var(--base-color1);
   display: flex;
   flex-direction: column-reverse;
   height: 162px;
