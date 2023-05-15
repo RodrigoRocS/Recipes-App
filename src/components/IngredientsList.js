@@ -30,7 +30,7 @@ function IngredientsList() {
   ));
 
   return (
-    <div>
+    <div className="ingredients-list-container">
       { mappedIngredients }
     </div>
   );
