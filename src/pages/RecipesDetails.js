@@ -98,11 +98,15 @@ function RecipeDetails() {
       ?.strInstructions : recipeDataId?.drinks?.[0]?.strInstructions;
 
   const MN = -11;
+
   return (
     <div>
       <h1 data-testid="recipe-title">{ recipeTitle }</h1>
+
       <img src={ recipeImg } alt="" data-testid="recipe-photo" width="100%" />
+
       {copied && <span>Link copied!</span>}
+
       <div>
         <button
           data-testid="share-btn"
@@ -121,13 +125,17 @@ function RecipeDetails() {
             : <img src={ favoriteIcon } alt="favorite icon" />}
         </button>
       </div>
+
       <p data-testid="recipe-category">{recipeCategory}</p>
+
       <ol>
         { ingredients?.map((e, i) => (
           <li key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>{ e }</li>
         )) }
       </ol>
+
       <span data-testid="instructions">{recipeInstructions}</span>
+
       {path === '/meals' && (
         <iframe
           data-testid="video"
@@ -140,7 +148,9 @@ function RecipeDetails() {
           allowFullScreen
         />
       )}
+
       <Recomendations />
+
       {!isDone && (
         <button
           onClick={ () => history.push(`${pathName}/in-progress`) }
