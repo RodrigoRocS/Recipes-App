@@ -49,10 +49,10 @@
 }
 
 .login-page-container form button {
-  background-color: var(--accent-color2);
+  background-color: var(--btn-color);
   border: unset;
   border-radius: 5px;
-  color: var(--btn-color);
+  color: var(--base-color1);
   font-weight: 700;
   height: 40px;
   width: 276px;

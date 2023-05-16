@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SearchCard from '../components/SearchCard';
 import '../styles/Recipes.css';
+import allIcon from '../dev_images/All.svg';
+import beefIcon from '../dev_images/Beef.svg';
+import goatIcon from '../dev_images/Goat.svg';
+import chickenIcon from '../dev_images/Chicken.svg';
+import breakfastIcon from '../dev_images/Breakfast.svg';
+import dessertIcon from '../dev_images/Dessert.svg';
+import allIcon2 from '../dev_images/All2.svg';
+import drinkIcon from '../dev_images/Ordinary Drink.svg';
+import cocktailIcon from '../dev_images/Cocktail.svg';
+import cocoaIcon from '../dev_images/Cocoa.svg';
+import otherIcon from '../dev_images/Other Unknown.svg';
+import shakeIcon from '../dev_images/Shake.svg';
+import CardRecipeGeneric from '../components/CardRecipeGeneric';
 
 function Recipes() {
   const local = useLocation();
@@ -75,76 +88,74 @@ function Recipes() {
     handlefetch();
   }, [location, selectedCategory]);
 
-  return (
-    <div>
+  const mealsImages = [beefIcon, goatIcon, chickenIcon, breakfastIcon, dessertIcon];
+  const drinkImages = [drinkIcon, cocktailIcon, cocoaIcon, otherIcon, shakeIcon];
 
+  console.log(drinkImages);
+
+  return (
+    <div className="recipes-page-container">
       <Header title={ rightPath } search />
+
       <SearchCard />
 
-      <button
-        onClick={ () => handleCategoryClick('All') }
-        data-testid="All-category-filter"
-      >
-        All
-      </button>
-      {
-        isLoading ? <p />
-          : categoryArray.length > 0 && categoryArray.map((item, index) => (
-            index <= maxcategory && (
-              <button
-                onClick={ () => handleCategoryClick(`${item.strCategory}`) }
-                key={ index }
-                data-testid={ `${item.strCategory}-category-filter` }
-              >
-                {item.strCategory}
-              </button>
-            )
-          ))
-      }
-      {
-        isLoading ? <>loading</>
-          : cardArray.length > 0
-          && cardArray.map((item, index) => (
-            index <= maxcard && (
-              <div
-                key={ index }
-              >
+      <div className="recipes-category-btns-container">
+        <button
+          onClick={ () => handleCategoryClick('All') }
+          data-testid="All-category-filter"
+        >
+          {
+            location === '/meals'
+              ? <img alt="all icon" src={ allIcon } />
+              : <img alt="all drinks icon" src={ allIcon2 } />
+          }
+        </button>
 
-                {
-                  location === '/meals' ? (
-                    <Link
-                      to={ `/meals/${item.idMeal}` }
-                      data-testid={ `${index}-recipe-card` }
-                    >
-                      <img
-                        className="img"
-                        id={ index }
-                        src={ item.strMealThumb }
-                        alt="strMealThumb"
-                        data-testid={ `${index}-card-img` }
-                      />
-                      <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={ `/drinks/${item.idDrink}` }
-                      data-testid={ `${index}-recipe-card` }
-                    >
-                      <img
-                        className="img"
-                        id={ index }
-                        src={ item.strDrinkThumb }
-                        alt="strDrinkThumb"
-                        data-testid={ `${index}-card-img` }
-                      />
-                      <div data-testid={ `${index}-card-name` }>{item.strDrink}</div>
-                    </Link>
-                  )
-                }
-              </div>
-            )
-          ))
-      }
+        {
+          isLoading ? <p />
+            : categoryArray.length > 0 && categoryArray.map((item, index) => (
+              index <= maxcategory && (
+                <button
+                  onClick={ () => handleCategoryClick(`${item.strCategory}`) }
+                  key={ index }
+                  data-testid={ `${item.strCategory}-category-filter` }
+                >
+                  <img
+                    alt={ item.strCategory }
+                    src={
+                      location === '/meals'
+                        ? mealsImages.find((icon) => icon.includes(item.strCategory))
+                        : drinkImages.find((icon) => icon
+                          .includes(item.strCategory/* .split('')[0] */))
+                    }
+                  />
+                </button>
+              )))
+        }
+      </div>
+
+      <div className="show-cards-container">
+        {
+          cardArray.length > 0 && cardArray.map((item, index) => (index <= maxcard && (
+            location === '/meals'
+              ? (
+                <CardRecipeGeneric
+                  key={ index }
+                  item={ item }
+                  index={ index }
+                  type="meals"
+                />
+              ) : (
+                <CardRecipeGeneric
+                  key={ index }
+                  item={ item }
+                  index={ index }
+                  type="drinks"
+                />
+              ))))
+        }
+      </div>
+
       <Footer />
     </div>
   );
