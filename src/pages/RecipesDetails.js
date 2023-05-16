@@ -7,6 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 import favoriteIcon from '../images/whiteHeartIcon.svg';
 import unfavoriteIcon from '../images/blackHeartIcon.svg';
 import './RecipesDetails.css';
+import { getRecipesInProgress } from '../services/RecipeInProgressLocalStorage';
 
 function RecipeDetails() {
   const { id } = useParams();
@@ -43,8 +44,11 @@ function RecipeDetails() {
   }, [id]);
 
   useEffect(() => {
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || {};
-    const inProgressKey = Object.keys(inProgressRecipes).some((e) => e === id);
+    const inProgressRecipes = getRecipesInProgress();
+    const inProgressKey = Object.keys(inProgressRecipes).some((e) => {
+      const recipeInProgress = inProgressRecipes[e];
+      return Object.keys(recipeInProgress).length !== 0;
+    });
     setInProgress(inProgressKey);
   }, [id]);
 

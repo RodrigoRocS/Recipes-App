@@ -7,6 +7,7 @@ export default function SearchProvider({ children }) {
   const [searchName, setSearchName] = useState('');
   const [searchType, setSearchType] = useState('');
   const [fetchRequest, setFetchRequest] = useState({});
+  const [isSearch, setIsSearch] = useState(false);
 
   const [fetchRecipe, recipeData, isFetchRecipeLoading] = useFetch([]);
 
@@ -51,6 +52,8 @@ export default function SearchProvider({ children }) {
     recipes,
     fetchRequest,
     setFetchRequest,
+    isSearch,
+    setIsSearch,
   }), [
     searchName,
     setSearchName,
@@ -61,6 +64,8 @@ export default function SearchProvider({ children }) {
     recipes,
     fetchRequest,
     setFetchRequest,
+    isSearch,
+    setIsSearch,
   ]);
 
   return (

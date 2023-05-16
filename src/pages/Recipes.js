@@ -17,6 +17,7 @@ import cocoaIcon from '../dev_images/Cocoa.svg';
 import otherIcon from '../dev_images/Other Unknown.svg';
 import shakeIcon from '../dev_images/Shake.svg';
 import CardRecipeGeneric from '../components/CardRecipeGeneric';
+import SearchContext from '../contexts/SearchContext';
 
 function Recipes() {
   const local = useLocation();
@@ -29,6 +30,7 @@ function Recipes() {
   const [categoryArray, setCategoryArray] = useState([]);
   const [cardArray, setCardArray] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
+  const { isSearch } = useContext(SearchContext);
   const maxcategory = 4;
   const maxcard = 11;
 
@@ -155,7 +157,6 @@ function Recipes() {
               ))))
         }
       </div>
-
       <Footer />
     </div>
   );

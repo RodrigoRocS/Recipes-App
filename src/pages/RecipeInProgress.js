@@ -60,24 +60,22 @@ function RecipeInProgress() {
 
             {copied && <span>Link copied!</span>}
 
-            <div>
-              <button
-                data-testid="share-btn"
-                onClick={ handleShareRecipes }
-              >
-                {shareIcon && <img src={ shareIcon } alt="share icon" />}
-              </button>
+            <button
+              data-testid="share-btn"
+              onClick={ handleShareRecipes }
+            >
+              {shareIcon && <img src={ shareIcon } alt="share icon" />}
+            </button>
 
-              <button
-                data-testid="favorite-btn"
-                onClick={ handleFavoriteRecipes }
-                src={ isFavorite ? unfavoriteIcon : favoriteIcon }
-              >
-                {isFavorite
-                  ? <img src={ unfavoriteIcon } alt="unfavorite icon" />
-                  : <img src={ favoriteIcon } alt="favorite icon" />}
-              </button>
-            </div>
+            <button
+              data-testid="favorite-btn"
+              onClick={ handleFavoriteRecipes }
+              src={ isFavorite ? unfavoriteIcon : favoriteIcon }
+            >
+              {isFavorite
+                ? <img src={ unfavoriteIcon } alt="unfavorite icon" />
+                : <img src={ favoriteIcon } alt="favorite icon" />}
+            </button>
           </nav>
         </div>
       </header>

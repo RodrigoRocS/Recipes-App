@@ -11,7 +11,7 @@ function FavoriteRecipes() {
 
   useEffect(() => {
     const localFavoritesRecipes = localStorage.getItem('favoriteRecipes');
-    const data = JSON.parse(localFavoritesRecipes);
+    const data = JSON.parse(localFavoritesRecipes) || [];
     setupdatedList(data);
     setListAll(data);
   }, []);
@@ -57,7 +57,7 @@ function FavoriteRecipes() {
       >
         Drinks
       </button>
-      { isSpanw ? <span>Link copied!</span> : <p />}
+      { isSpanw === true ? <p>Link copied!</p> : null}
       { updatedList.length === 0 ? <p /> : updatedList.map((item, index) => (
         <div
           key={ index }
@@ -88,7 +88,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ shareIcon }
-                    alt=""
+                    alt="shareIcon"
                   />
                 </button>
                 <button
@@ -99,7 +99,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ blackHeartIcon }
-                    alt=""
+                    alt="heartIcon"
                   />
                 </button>
               </div>
@@ -128,7 +128,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ shareIcon }
-                    alt=""
+                    alt="shareIcon"
                   />
                 </button>
                 <button
@@ -139,7 +139,7 @@ function FavoriteRecipes() {
                 >
                   <img
                     src={ blackHeartIcon }
-                    alt=""
+                    alt="heartIcon"
                   />
                 </button>
               </div>
