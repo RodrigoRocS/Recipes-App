@@ -96,69 +96,73 @@ function Recipes() {
   console.log(drinkImages);
 
   return (
-    <div className="recipes-page-container">
+    <div>
+
       <Header title={ rightPath } search />
 
-      <SearchCard />
+      <button
+        onClick={ () => handleCategoryClick('All') }
+        data-testid="All-category-filter"
+      >
+        All
+      </button>
+      {
+        isLoading ? <p />
+          : categoryArray.length > 0 && categoryArray.map((item, index) => (
+            index <= maxcategory && (
+              <button
+                onClick={ () => handleCategoryClick(`${item.strCategory}`) }
+                key={ index }
+                data-testid={ `${item.strCategory}-category-filter` }
+              >
+                {item.strCategory}
+              </button>
+            )
+          ))
+      }
 
-      <div className="recipes-category-btns-container">
-        <button
-          onClick={ () => handleCategoryClick('All') }
-          data-testid="All-category-filter"
-        >
-          {
-            location === '/meals'
-              ? <img alt="all icon" src={ allIcon } />
-              : <img alt="all drinks icon" src={ allIcon2 } />
-          }
-        </button>
-
-        {
-          isLoading ? <p />
-            : categoryArray.length > 0 && categoryArray.map((item, index) => (
-              index <= maxcategory && (
-                <button
-                  onClick={ () => handleCategoryClick(`${item.strCategory}`) }
-                  key={ index }
-                  data-testid={ `${item.strCategory}-category-filter` }
-                >
-                  <img
-                    alt={ item.strCategory }
-                    src={
-                      location === '/meals'
-                        ? mealsImages.find((icon) => icon.includes(item.strCategory))
-                        : drinkImages.find((icon) => icon
-                          .includes(item.strCategory/* .split('')[0] */))
-                    }
-                  />
-                </button>
-              )))
-        }
-      </div>
-
-      <div className="show-cards-container">
-        {
-          cardArray.length > 0 && cardArray.map((item, index) => (index <= maxcard && (
-            location === '/meals'
-              ? (
-                <CardRecipeGeneric
-                  key={ index }
-                  item={ item }
-                  index={ index }
-                  type="meals"
-                />
-              ) : (
-                <CardRecipeGeneric
-                  key={ index }
-                  item={ item }
-                  index={ index }
-                  type="drinks"
-                />
-              ))))
-        }
-      </div>
+      { (
+        isSearch ? <SearchCard /> : (
+          cardArray.length > 0 && cardArray.map((item, index) => (
+            index <= maxcard && (
+              <div key={ index }>
+                {location === '/meals' ? (
+                  <Link
+                    to={ `/meals/${item.idMeal}` }
+                    data-testid={ `${index}-recipe-card` }
+                  >
+                    <img
+                      className="img"
+                      id={ index }
+                      src={ item.strMealThumb }
+                      alt="strMealThumb"
+                      data-testid={ `${index}-card-img` }
+                    />
+                    <div data-testid={ `${index}-card-name` }>{item.strMeal}</div>
+                  </Link>
+                ) : (
+                  <Link
+                    to={ `/drinks/${item.idDrink}` }
+                    data-testid={ `${index}-recipe-card` }
+                  >
+                    <img
+                      className="img"
+                      id={ index }
+                      src={ item.strDrinkThumb }
+                      alt="strDrinkThumb"
+                      data-testid={ `${index}-card-img` }
+                    />
+                    <div data-testid={ `${index}-card-name` }>{item.strDrink}</div>
+                  </Link>
+                )}
+              </div>
+            )
+          ))
+        )
+      )}
       <Footer />
     </div>
   );
 }
 export default Recipes;
+
