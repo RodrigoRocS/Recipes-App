@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -93,26 +93,23 @@ function Recipes() {
   const mealsImages = [beefIcon, goatIcon, chickenIcon, breakfastIcon, dessertIcon];
   const drinkImages = [drinkIcon, cocktailIcon, cocoaIcon, otherIcon, shakeIcon];
 
-  console.log(drinkImages);
-
   return (
-     <div className="recipes-page-container">
-
+    <div className="recipes-page-container">
       <Header title={ rightPath } search />
-      
-       <div className="recipes-category-btns-container">
 
-      <button
-        onClick={ () => handleCategoryClick('All') }
-        data-testid="All-category-filter"
-      >
-        {
+      <div className="recipes-category-btns-container">
+        <button
+          onClick={ () => handleCategoryClick('All') }
+          data-testid="All-category-filter"
+        >
+          {
             location === '/meals'
               ? <img alt="all icon" src={ allIcon } />
               : <img alt="all drinks icon" src={ allIcon2 } />
           }
-      </button>
-  {
+        </button>
+
+        {
           isLoading ? <p />
             : categoryArray.length > 0 && categoryArray.map((item, index) => (
               index <= maxcategory && (
@@ -133,10 +130,14 @@ function Recipes() {
                 </button>
               )))
         }
-      { (
-        isSearch ? <SearchCard /> : (
- <div className="show-cards-container">
-      cardArray.length > 0 && cardArray.map((item, index) => (index <= maxcard && (
+      </div>
+
+      <div className="show-cards-container">
+        {
+          isSearch ? <SearchCard />
+            : (
+              cardArray.length > 0
+          && cardArray.map((item, index) => (index <= maxcard && (
             location === '/meals'
               ? (
                 <CardRecipeGeneric
@@ -152,17 +153,11 @@ function Recipes() {
                   index={ index }
                   type="drinks"
                 />
-              ))))
+              )))))
         }
-                )}
-              </div>
-            )
-          ))
-        )
-      )}
+      </div>
       <Footer />
     </div>
   );
 }
 export default Recipes;
-
